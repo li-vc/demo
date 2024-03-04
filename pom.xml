@@ -70,7 +70,39 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
-    </build>
 
+
+        </plugins>
+
+    </build>
+    <!--为了加速下载需要在pom文件中复制如下 -->
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <!--snapshots默认是关闭的,需要开启 -->
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyun</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
