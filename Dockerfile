@@ -16,15 +16,18 @@ RUN mvn clean \
     install \
     package -Dmaven.test.skip=true
 
-#可执行镜像
+#可执行镜像 考虑到线上bug调优，可使用jdk
 FROM openjdk:8-jre-alpine
-#时区设置
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
-LABEL maintainer="XXX"
 #从打包阶段复制jar包到当前阶段
 COPY --from=buildapp /app/target/*.jar /app.jar
+#时区设置 touch后可保留复制的时间
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone && touch /app.jar
+LABEL maintainer="XXX"
 
+# java虚拟机命令
 ENV JAVA_OPTS=""
+#可以传spring 和shell命令
 ENV PARAMS=""
+#docker run -e JAVA_OPTS="-Xms512m -Xms33" -e  PARAMS="--spring.profiles.active=prod >/dev/null 2>&1 &"
 # 运行jar包
 ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar /app.jar $PARAMS" ]
